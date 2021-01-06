@@ -1,9 +1,3 @@
-# VERSION 1.10.9
-# AUTHOR: Matthieu "Puckel_" Roisil
-# DESCRIPTION: Basic Airflow container
-# BUILD: docker build --rm -t puckel/docker-airflow .
-# SOURCE: https://github.com/puckel/docker-airflow
-
 FROM python:3.7-slim-buster
 LABEL maintainer="gk"
 
@@ -27,6 +21,8 @@ ENV LC_MESSAGES en_US.UTF-8
 
 # Disable noisy "Handling signal" log messages:
 # ENV GUNICORN_CMD_ARGS --log-level WARNING
+
+RUN apt-get update && apt-get install -y dos2unix
 
 RUN set -ex \
     && buildDeps=' \
@@ -75,6 +71,8 @@ RUN set -ex \
 
 COPY script/entrypoint.sh /entrypoint.sh
 COPY config/airflow.cfg ${AIRFLOW_USER_HOME}/airflow.cfg
+
+RUN dos2unix /entrypoint.sh && apt-get --purge remove -y dos2unix && rm -rf /var/lib/apt/lists/*
 
 RUN chown -R airflow: ${AIRFLOW_USER_HOME}
 
