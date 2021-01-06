@@ -25,7 +25,7 @@ export \
 
 # Install custom python package if requirements.txt is present
 if [ -e "/requirements.txt" ]; then
-    $(command -v pip) install --user -r /requirements.txt
+    $(command -v pip) install --trusted-host pypi.org --trusted-host files.pythonhosted.org --user -r /requirements.txt
 fi
 
 wait_for_port() {
